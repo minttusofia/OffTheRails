@@ -1,7 +1,7 @@
 import math
 import write_output
 
-output = Output
+output = write_output.Output()
 
 class Warehouse:
     def __init__(self, coords_str, product_str):
@@ -80,6 +80,7 @@ class Drone:
         self.inventory = []
 
     def load(self, warehouse, itemtype, amount):
+        global output
         self.cur_turn += dist(self, warehouse)
         for a in amount:
             warehouse.remove(itemtype)
