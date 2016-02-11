@@ -55,7 +55,6 @@ class Order:
     def y(self):
         return self._y
 
-
 class District:
     def __init__(self,x,y,w,h):
         self.x = x
