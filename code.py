@@ -167,3 +167,31 @@ def allocateWarehouses():
 
 allocateDrones()
 allocateWarehouses()
+
+warehouseToWarehouseDist = {}
+
+def closestWarehouses(fromWarehouse):
+    global warehouseToWarehouseDist
+    for w in warehouses:
+        warehouseToWarehouseDist[w] = dist(fromWarehouse,w)
+    return sorted(warehouseToWarehouseDist.values())
+
+def findClosestProduct(fromWarehouse, product, needed):
+    warehouses = closestWarehouses(fromWarehouse)
+    for w in warehouses:
+         if product in w.products > 0:
+            numAvailable = w.products[product]
+            if numAvailable >= needed:
+            # add command to load
+                break
+            else :
+                # add command to load
+                needed = needed - numAvailable
+            
+    return 0
+
+
+
+
+
+
