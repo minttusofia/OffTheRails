@@ -16,6 +16,16 @@ class Warehouse:
         plist = product_str.split()
         for weight in plist:
             self._products.append(int(weight))
+    
+    def nextDrone(self):
+        earliest = self.drones[0].cur_turn
+        earliest_drone = self.drones[0]
+        for d in self.drones[1:]:
+            if d.cur_turn < earliest:
+                earliest = d.cur_turn
+                earliest_drone = d
+
+        return earliest_drone
 
     @property
     def x(self):
@@ -176,16 +186,19 @@ def closestWarehouses(fromWarehouse):
         warehouseToWarehouseDist[w] = dist(fromWarehouse,w)
     return sorted(warehouseToWarehouseDist.values())
 
-def findClosestProduct(fromWarehouse, product, needed):
+def findClosestProduct(fromWarehouse, order, product, needed):
     warehouses = closestWarehouses(fromWarehouse)
+    d = fromWarehouse.nextDrone()
     for w in warehouses:
          if product in w.products > 0:
             numAvailable = w.products[product]
             if numAvailable >= needed:
-            # add command to load
+                d.load(w,product,needed)
+                d.deliver()
                 break
-            else :
-                # add command to load
+            else:
+                d.load(w,product,numAvailable)
+                d.deliver()
                 needed = needed - numAvailable
             
     return 0
