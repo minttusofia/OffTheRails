@@ -8,6 +8,8 @@ class Warehouse:
         self._products = []
         self.ordercount = 0
         self.dronecount = 0
+        self.drones = []
+        self.orders = []
         plist = product_str.split()
         for weight in plist:
             self._products.append(int(weight))
@@ -32,7 +34,6 @@ class Order:
         self._y = loc_y
         self._n_products = int(n_orders_str)
         self._products = {}
-        self.warehouse = None
         products = products_str.split()
         for product in products:
             if product in self._products:
@@ -54,6 +55,22 @@ class Order:
     @property
     def y(self):
         return self._y
+
+class Drone:
+    def __init__(self):
+        global warehouses
+        self._id = id_val
+        self.x = warehouses[0].x
+        self.y = warehouses[0].y
+        self.inventory = []
+
+    def load(self,itemtype,amount):
+        for a in amount:
+            self.inventory.append(itemtype)
+
+    @property
+    def idval(self):
+        return self._id
 
 class District:
     def __init__(self,x,y,w,h):
@@ -102,19 +119,20 @@ def allocateDrones():
     global n_orders
     global drones
     global warehouses
-    global ordersForWarehouse
 
-    print("drones:" + drones)
+    allocated = 0
 
     for w in warehouses:
         load = w.ordercount/n_orders
         w.dronecount = round(load*(int)(drones))
 
+        for d in drones[allocated:w.dronecount]:
+            w.drones.append(d)
+        allocated += w.dronecount
+
 def allocateWarehouses():
     global orders
     global warehouses
-    global warehouseForOrder
-    global ordersForWarehouse
 
     for o in orders:
         d = dist(o,warehouses[0])
@@ -125,7 +143,7 @@ def allocateWarehouses():
                 d = dist(o,w)
                 closestW = w;
 
-        o.warehouse = closestW
+        closestW.orders.append(o)
         closestW.ordercount += 1
 
 
