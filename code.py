@@ -194,11 +194,11 @@ def findClosestProduct(fromWarehouse, order, product, needed):
             numAvailable = w.products[product]
             if numAvailable >= needed:
                 d.load(w,product,needed)
-                d.deliver()
+                d.deliver(order,product,needed)
                 break
             else:
                 d.load(w,product,numAvailable)
-                d.deliver()
+                d.deliver(order,product,numAvailable)
                 needed = needed - numAvailable
             
     return 0
