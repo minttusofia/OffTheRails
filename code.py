@@ -75,9 +75,3 @@ with open("busy_day.in") as f:
         orders.append(Order(i, raw[cur_line], raw[cur_line + 1],
             raw[cur_line + 2]))
         cur_line += 3
-    for order in orders:
-        print(order.idval)
-        for product in order.products:
-            print(product + ": " + str(order.products.get(product) *
-                product_weights[int(product)]))
-        print()
