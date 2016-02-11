@@ -1,4 +1,7 @@
 import math
+import write_output
+
+output = Output
 
 class Warehouse:
     def __init__(self, coords_str, product_str):
@@ -57,16 +60,31 @@ class Order:
         return self._y
 
 class Drone:
-    def __init__(self):
+    def __init__(self, warehouse):
         global warehouses
         self._id = id_val
+        self.cur_turn = 0
         self.x = warehouses[0].x
         self.y = warehouses[0].y
+        self.warehouse = warehouse
         self.inventory = []
 
-    def load(self,itemtype,amount):
+    def load(self, warehouse, itemtype, amount):
+        self.cur_turn += dist(self, warehouse)
         for a in amount:
+            warehouse.remove(itemtype)
             self.inventory.append(itemtype)
+        output.load(self.idval, warehouse.idval, itemtype, amount)
+        self.x = warehouse.x
+        self.x = warehouse.y
+
+    def deliver(self, order, itemtype, amount):
+        global output
+        self.cur_turn += dist(self, assignment[1])
+        order.deliver(self.idval, order.idval,
+                itemtype, amount)
+        self.x = order.x
+        self.y = order.y
 
     @property
     def idval(self):
